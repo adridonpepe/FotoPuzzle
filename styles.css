@@ -1,0 +1,71 @@
+/* styles.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.piece-dragging {
+    opacity: 0.9;
+    transform: scale(1.05);
+    z-index: 100 !important;
+    cursor: grabbing !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+}
+
+.piece-placed {
+    /* When piece is snapped */
+    z-index: 10;
+    pointer-events: none;
+    box-shadow: none !important;
+}
+
+.puzzle-piece {
+    cursor: grab;
+    transition: box-shadow 0.2s, transform 0.1s, opacity 0.2s;
+    touch-action: none; /* Prevent scrolling when dragging on mobile */
+    /* Soft border so pieces can be seen in tray */
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+.puzzle-piece:active {
+    cursor: grabbing;
+}
+
+/* Optional: small pulse to correctly placed pieces initially */
+@keyframes correctSnap {
+    0% { filter: brightness(1); transform: scale(1); }
+    50% { filter: brightness(1.3); transform: scale(1.02); }
+    100% { filter: brightness(1); transform: scale(1); }
+}
+
+.snap-anim {
+    animation: correctSnap 0.4s ease-out;
+}
+
+/* Win board animation */
+@keyframes winPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); box-shadow: 0 0 40px rgba(59, 130, 246, 0.8); }
+    100% { transform: scale(1); }
+}
+
+.win-anim {
+    animation: winPulse 0.8s ease-out;
+    border-color: transparent !important;
+}
+
+/* Scrollbar styling for Tray */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.3);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.5);
+}

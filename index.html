@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FotoPuzzle</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0f172a',
+                        card: 'rgba(30, 41, 59, 0.7)',
+                        primary: '#3b82f6',
+                        secondary: '#8b5cf6'
+                    },
+                    animation: {
+                        'bounce-slight': 'bounceSlight 2s infinite',
+                        'pop-in': 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+                    },
+                    keyframes: {
+                        bounceSlight: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-5%)' },
+                        },
+                        popIn: {
+                            '0%': { opacity: '0', transform: 'scale(0.8)' },
+                            '100%': { opacity: '1', transform: 'scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Icons (Lucide) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-dark text-white min-h-screen overflow-hidden font-sans flex flex-col select-none touch-none">
+    
+    <!-- Screen 1: Upload (Start) -->
+    <section id="screen-upload" class="absolute inset-0 z-10 flex flex-col items-center justify-center p-6 bg-gradient-to-br from-slate-900 to-indigo-950 transition-opacity duration-500">
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-2 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">FotoPuzzle</h1>
+        <p class="text-slate-400 mb-10 text-center max-w-md">Transforma tus fotografías en puzles y desafía tu mente.</p>
+        
+        <div class="flex flex-col gap-4 w-full max-w-xs">
+            <label class="relative group cursor-pointer overflow-hidden rounded-2xl bg-blue-600 hover:bg-blue-500 transition-all p-4 shadow-lg shadow-blue-900/50 flex flex-col items-center justify-center border border-blue-400/30">
+                <i data-lucide="image-plus" class="w-8 h-8 mb-2"></i>
+                <span class="font-semibold">Subir Fotografía</span>
+                <input type="file" id="uploadFile" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full" />
+            </label>
+            
+            <label class="relative group cursor-pointer overflow-hidden rounded-2xl bg-slate-800 hover:bg-slate-700 transition-all p-4 shadow-lg flex flex-col items-center justify-center border border-slate-600">
+                <i data-lucide="camera" class="w-8 h-8 mb-2 text-purple-400"></i>
+                <span class="font-semibold">Hacer Foto</span>
+                <input type="file" id="captureFile" accept="image/*" capture="environment" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full" />
+            </label>
+        </div>
+        <button id="btn-show-history" class="mt-8 text-slate-400 hover:text-white transition flex items-center gap-2"><i data-lucide="award" class="w-5 h-5"></i> Ver Historial de Puzles</button>
+    </section>
+
+    <!-- Screen 2: Config -->
+    <section id="screen-config" class="hidden absolute inset-0 z-20 flex flex-col items-center justify-center p-4 md:p-6 bg-gradient-to-br from-slate-900 to-indigo-950 transition-opacity duration-500 opacity-0">
+        <button id="btn-back-config" class="absolute top-6 left-6 p-2 rounded-full bg-slate-800/50 hover:bg-slate-700 transition"><i data-lucide="arrow-left"></i></button>
+        
+        <h2 class="text-2xl font-bold mb-6">Configura tu Puzle</h2>
+        
+        <!-- Preview Container -->
+        <div class="w-full max-w-xs md:max-w-md aspect-[3/4] md:aspect-[4/3] bg-black/40 rounded-xl overflow-hidden shadow-2xl border border-slate-700 mb-8 relative flex items-center justify-center bg-cover bg-center" id="img-preview">
+            <div id="preview-loader" class="hidden animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        </div>
+        
+        <div class="w-full max-w-md">
+            <p class="text-sm text-slate-400 mb-3 text-center uppercase tracking-wider font-semibold">Selecciona la Dificultad</p>
+            <div class="grid grid-cols-3 gap-3 mb-8">
+                <button class="difficulty-btn px-4 py-3 rounded-xl bg-slate-800 border-2 border-slate-700 hover:border-blue-400 focus:border-blue-500 transition-all text-center flex flex-col items-center gap-1 active-diff" data-pieces="12">
+                    <span class="font-bold text-lg text-green-400">Fácil</span>
+                    <span class="text-xs text-slate-400">12 piezas</span>
+                </button>
+                <button class="difficulty-btn px-4 py-3 rounded-xl bg-slate-800 border-2 border-slate-700 hover:border-blue-400 focus:border-blue-500 transition-all text-center flex flex-col items-center gap-1" data-pieces="24">
+                    <span class="font-bold text-lg text-yellow-400">Medio</span>
+                    <span class="text-xs text-slate-400">24 piezas</span>
+                </button>
+                <button class="difficulty-btn px-4 py-3 rounded-xl bg-slate-800 border-2 border-slate-700 hover:border-blue-400 focus:border-blue-500 transition-all text-center flex flex-col items-center gap-1" data-pieces="48">
+                    <span class="font-bold text-lg text-red-400">Difícil</span>
+                    <span class="text-xs text-slate-400">48 piezas</span>
+                </button>
+            </div>
+            
+            <button id="btn-generate" class="w-full py-4 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 font-bold text-lg shadow-lg hover:shadow-blue-500/50 hover:scale-[1.02] transition-transform flex items-center justify-center gap-2">
+                <i data-lucide="play"></i> Generar Puzle
+            </button>
+        </div>
+    </section>
+
+    <!-- Screen 3: Game -->
+    <section id="screen-game" class="hidden absolute inset-0 z-30 flex flex-col md:flex-row bg-slate-900 transition-opacity duration-500 opacity-0 overflow-hidden">
+        <!-- Top bar (Mobile) / Absolute (Desktop) -->
+        <div class="absolute top-4 left-4 z-40 flex flex-wrap gap-2 pr-4">
+            <button id="btn-restart" class="p-2 rounded-full bg-slate-800/80 backdrop-blur hover:bg-slate-700 text-white shadow flex-shrink-0" title="Reiniciar Menú">
+                <i data-lucide="home" class="w-5 h-5"></i>
+            </button>
+            <div class="bg-card backdrop-blur px-3 sm:px-4 py-2 rounded-full border border-slate-700 font-mono text-sm shadow flex items-center gap-2">
+                <i data-lucide="puzzle" class="w-4 h-4 text-slate-400 hidden sm:inline"></i>
+                <span id="progress-text" class="font-bold text-blue-400">0 / 12</span>
+            </div>
+            <div class="bg-card backdrop-blur px-3 sm:px-4 py-2 rounded-full border border-slate-700 font-mono text-sm sm:text-base shadow flex items-center gap-2 border-green-500/30">
+                <i data-lucide="timer" class="w-4 h-4 text-green-400"></i>
+                <span id="game-timer" class="font-bold text-green-400">00:00</span>
+            </div>
+            <button id="btn-toggle-preview" class="px-3 sm:px-4 py-2 rounded-full bg-slate-800/80 backdrop-blur hover:bg-slate-700 border border-slate-700 text-white shadow font-semibold flex items-center gap-2 transition-colors">
+                <i data-lucide="eye" id="icon-eye" class="w-4 h-4"></i> <span class="hidden sm:inline">Ver Foto</span>
+            </button>
+        </div>
+
+        <!-- Board Area -->
+        <div id="board-container" class="flex-1 flex items-center justify-center p-4 pt-20 pb-0 md:p-8 md:pt-8 w-full h-[60%] md:h-full relative select-none">
+            <!-- The Board silhouette -->
+            <div id="puzzle-board" class="relative border-4 border-dashed border-slate-700/50 rounded-lg overflow-hidden bg-black/40 shadow-inner flex-shrink-0">
+                <div id="board-preview-layer" class="absolute inset-0 bg-cover bg-center opacity-0 pointer-events-none transition-opacity duration-300 z-0 select-none"></div>
+                <!-- Drop targets will be dynamically generated here -->
+            </div>
+        </div>
+
+        <!-- Tray Area -->
+        <div id="tray-container" class="w-full h-[40%] md:w-[350px] md:h-full bg-slate-800/90 border-t md:border-t-0 md:border-l border-slate-700 shadow-2xl relative flex flex-col">
+            <div class="p-3 border-b border-slate-700 flex justify-between items-center bg-slate-800/50">
+                <h3 class="font-bold text-slate-300 flex items-center gap-2"><i data-lucide="package-open" class="w-4 h-4"></i> Bandeja</h3>
+                <button id="btn-shuffle" class="p-1.5 rounded bg-slate-700 hover:bg-slate-600 text-xs font-semibold flex items-center gap-1 transition-colors"><i data-lucide="shuffle" class="w-3 h-3"></i> Mezclar</button>
+            </div>
+            <!-- Pieces will go here -->
+            <div id="tray" class="flex-1 overflow-y-auto overflow-x-hidden p-4 relative content-start flex flex-wrap gap-2 md:gap-4 md:justify-center will-change-transform touch-pan-y">
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal: Win State -->
+    <div id="win-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm opacity-0 transition-opacity duration-500">
+        <div class="bg-slate-800 rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl border border-slate-700 transform scale-95 transition-transform duration-500" id="win-modal-content">
+            <div class="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="award" class="w-10 h-10 text-green-400 animate-bounce-slight"></i>
+            </div>
+            <h2 class="text-3xl font-extrabold mb-1 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">¡Completado!</h2>
+            <p class="text-slate-400 mb-2">Has resuelto el puzle correctamente.</p>
+            <p class="text-white font-mono text-lg mb-8 bg-slate-900 border border-slate-700 rounded-lg py-2 inline-block px-4">Tiempo: <span id="win-time-text" class="text-green-400">00:00</span></p>
+            
+            <div class="flex flex-col gap-3">
+                <button id="btn-win-replay" class="py-3 px-4 rounded-xl bg-slate-700 hover:bg-slate-600 font-semibold transition flex items-center justify-center gap-2">
+                    <i data-lucide="rotate-ccw" class="w-5 h-5"></i> Volver a jugar (Mismo)
+                </button>
+                <button id="btn-win-diff" class="py-3 px-4 rounded-xl bg-slate-700 hover:bg-slate-600 font-semibold transition flex items-center justify-center gap-2">
+                    <i data-lucide="settings-2" class="w-5 h-5"></i> Cambiar dificultad
+                </button>
+                <button id="btn-win-new" class="py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold transition flex items-center justify-center gap-2">
+                    <i data-lucide="camera" class="w-5 h-5"></i> Nueva foto
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: History -->
+    <div id="history-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm opacity-0 transition-opacity duration-500">
+        <div class="bg-slate-800 rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl border border-slate-700 max-h-[80vh] flex flex-col transform scale-95 transition-transform duration-500" id="history-modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold flex items-center gap-2 text-white"><i data-lucide="history" class="text-blue-400"></i> Historial</h2>
+                <button id="btn-close-history" class="p-2 rounded-full hover:bg-slate-700 text-slate-400 hover:text-white transition"><i data-lucide="x"></i></button>
+            </div>
+            <div id="history-list" class="flex-1 overflow-y-auto pr-2 space-y-3">
+                <!-- Records go here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Confetti Canvas -->
+    <canvas id="confetti-canvas" class="fixed inset-0 z-40 pointer-events-none"></canvas>
+
+    <script src="app.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

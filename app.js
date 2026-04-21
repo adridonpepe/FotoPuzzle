@@ -47,6 +47,7 @@ const historyModalContent = document.getElementById('history-modal-content');
 const btnShowHistory = document.getElementById('btn-show-history');
 const btnCloseHistory = document.getElementById('btn-close-history');
 const historyList = document.getElementById('history-list');
+const btnDemo = document.getElementById('btn-demo');
 
 let timerInterval = null;
 let secondsElapsed = 0;
@@ -88,6 +89,16 @@ function handleImageSelect(e) {
 
 uploadInput.addEventListener('change', handleImageSelect);
 captureInput.addEventListener('change', handleImageSelect);
+
+btnDemo.addEventListener('click', () => {
+    const img = new Image();
+    img.onload = () => {
+        state.originalImage = img;
+        setupConfigScreen();
+        showScreen('config');
+    };
+    img.src = 'demo_family.png';
+});
 
 // --- Screen 2: Config ---
 function setupConfigScreen() {

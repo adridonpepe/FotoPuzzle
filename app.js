@@ -1,6 +1,133 @@
 // app.js
 
-// --- State and Config ---
+const translations = {
+    es: {
+        desc_main: "Transforma tus fotografías en puzles y desafía tu mente.",
+        btn_upload: "Subir Fotografía",
+        btn_capture: "Hacer Foto",
+        btn_history: "Ver Historial de Puzles",
+        demo_gallery: "Galería Demo",
+        demo_1: "Picnic Familiar",
+        demo_2: "Parque Infantil",
+        demo_3: "Dinosaurios",
+        config_title: "Configura tu Puzle",
+        config_diff: "Selecciona la Dificultad",
+        diff_easy: "Fácil",
+        pieces_12: "12 piezas",
+        diff_medium: "Medio",
+        pieces_24: "24 piezas",
+        diff_hard: "Difícil",
+        pieces_48: "48 piezas",
+        btn_generate: "Generar Puzle",
+        btn_view_photo: "Ver Foto",
+        tray_title: "Bandeja",
+        btn_shuffle: "Mezclar",
+        win_title: "¡Completado!",
+        win_desc: "Has resuelto el puzle correctamente.",
+        win_time: "Tiempo:",
+        btn_replay: "Volver a jugar (Mismo)",
+        btn_change_diff: "Cambiar dificultad",
+        btn_new_photo: "Nueva foto",
+        history_title: "Historial",
+        history_empty: "Aún no has completado ningún puzle. ¡Empieza a jugar!",
+        confirm_quit: "¿Seguro que quieres abandonar este puzle?",
+        pieces: "pz"
+    },
+    en: {
+        desc_main: "Transform your photos into puzzles and challenge your mind.",
+        btn_upload: "Upload Photo",
+        btn_capture: "Take Photo",
+        btn_history: "View Puzzle History",
+        demo_gallery: "Demo Gallery",
+        demo_1: "Family Picnic",
+        demo_2: "Playground",
+        demo_3: "Dinosaurs",
+        config_title: "Configure your Puzzle",
+        config_diff: "Select Difficulty",
+        diff_easy: "Easy",
+        pieces_12: "12 pieces",
+        diff_medium: "Medium",
+        pieces_24: "24 pieces",
+        diff_hard: "Hard",
+        pieces_48: "48 pieces",
+        btn_generate: "Generate Puzzle",
+        btn_view_photo: "View Photo",
+        tray_title: "Tray",
+        btn_shuffle: "Shuffle",
+        win_title: "Completed!",
+        win_desc: "You have successfully solved the puzzle.",
+        win_time: "Time:",
+        btn_replay: "Play Again (Same)",
+        btn_change_diff: "Change Difficulty",
+        btn_new_photo: "New Photo",
+        history_title: "History",
+        history_empty: "You haven't completed any puzzles yet. Start playing!",
+        confirm_quit: "Are you sure you want to abandon this puzzle?",
+        pieces: "pcs"
+    },
+    fr: {
+        desc_main: "Transformez vos photos en puzzles et mettez votre esprit au défi.",
+        btn_upload: "Téléverser une Photo",
+        btn_capture: "Prendre une Photo",
+        btn_history: "Voir l'historique des puzzles",
+        demo_gallery: "Galerie Démo",
+        demo_1: "Pique-nique en Famille",
+        demo_2: "Aire de jeux",
+        demo_3: "Dinosaures",
+        config_title: "Configurez votre Puzzle",
+        config_diff: "Sélectionnez la difficulté",
+        diff_easy: "Facile",
+        pieces_12: "12 pièces",
+        diff_medium: "Moyen",
+        pieces_24: "24 pièces",
+        diff_hard: "Difficile",
+        pieces_48: "48 pièces",
+        btn_generate: "Générer le Puzzle",
+        btn_view_photo: "Voir la Photo",
+        tray_title: "Plateau",
+        btn_shuffle: "Mélanger",
+        win_title: "Terminé!",
+        win_desc: "Vous avez résolu le puzzle avec succès.",
+        win_time: "Temps:",
+        btn_replay: "Rejouer (Le même)",
+        btn_change_diff: "Changer de Difficulté",
+        btn_new_photo: "Nouvelle Photo",
+        history_title: "Historique",
+        history_empty: "Vous n'avez pas encore terminé de puzzle. Commencez à jouer !",
+        confirm_quit: "Êtes-vous sûr de vouloir abandonner ce puzzle ?",
+        pieces: "pcs"
+    }
+};
+
+let currentLang = localStorage.getItem('puzzleLang') || 'es';
+
+function setLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('puzzleLang', lang);
+    const t = translations[lang];
+    
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key]) {
+            el.innerText = t[key];
+        }
+    });
+    
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        if(btn.dataset.lang === lang) {
+            btn.classList.add('bg-blue-600', 'text-white');
+            btn.classList.remove('text-slate-400', 'hover:text-white');
+        } else {
+            btn.classList.remove('bg-blue-600', 'text-white');
+            btn.classList.add('text-slate-400', 'hover:text-white');
+        }
+    });
+
+    const historyModal = document.getElementById('history-modal');
+    if (historyModal && !historyModal.classList.contains('hidden')) {
+        loadHistory();
+    }
+}// --- State and Config ---
 const state = {
     originalImage: null, // HTMLImageElement
     processedImage: null, // Cropped canvas
@@ -47,7 +174,6 @@ const historyModalContent = document.getElementById('history-modal-content');
 const btnShowHistory = document.getElementById('btn-show-history');
 const btnCloseHistory = document.getElementById('btn-close-history');
 const historyList = document.getElementById('history-list');
-const btnDemos = document.querySelectorAll('.btn-demo');
 
 let timerInterval = null;
 let secondsElapsed = 0;
@@ -90,19 +216,7 @@ function handleImageSelect(e) {
 uploadInput.addEventListener('change', handleImageSelect);
 captureInput.addEventListener('change', handleImageSelect);
 
-btnDemos.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        const src = e.currentTarget.dataset.src;
-        const img = new Image();
-        img.crossOrigin = "Anonymous";
-        img.onload = () => {
-            state.originalImage = img;
-            setupConfigScreen();
-            showScreen('config');
-        };
-        img.src = src;
-    });
-});
+
 
 // --- Screen 2: Config ---
 function setupConfigScreen() {
@@ -501,7 +615,7 @@ btnShuffle.addEventListener('click', () => {
 });
 
 btnRestart.addEventListener('click', () => {
-    if(confirm('¿Seguro que quieres abandonar este puzle?')) {
+    if(confirm(translations[currentLang].confirm_quit)) {
         showScreen('config');
     }
 });
@@ -543,7 +657,7 @@ function loadHistory() {
     historyList.innerHTML = '';
     
     if (history.length === 0) {
-        historyList.innerHTML = '<p class="text-slate-500 text-center py-8">Aún no has completado ningún puzle. ¡Empieza a jugar!</p>';
+        historyList.innerHTML = `<p class="text-slate-500 text-center py-8">${translations[currentLang].history_empty}</p>`;
         return;
     }
     
@@ -551,10 +665,11 @@ function loadHistory() {
         const m = Math.floor(record.time / 60).toString().padStart(2, '0');
         const s = (record.time % 60).toString().padStart(2, '0');
         
-        let label = "Fácil";
+        const t = translations[currentLang];
+        let label = t.diff_easy;
         let color = "text-green-400";
-        if(record.difficulty === 24) { label = "Medio"; color = "text-yellow-400"; }
-        if(record.difficulty >= 48) { label = "Difícil"; color = "text-red-400"; }
+        if(record.difficulty === 24) { label = t.diff_medium; color = "text-yellow-400"; }
+        if(record.difficulty >= 48) { label = t.diff_hard; color = "text-red-400"; }
         
         const thumbHtml = record.thumb ? `<img src="${record.thumb}" class="w-12 h-12 md:w-16 md:h-16 object-cover rounded-md border border-slate-500 shadow-sm flex-shrink-0" />` : `<div class="w-12 h-12 md:w-16 md:h-16 bg-slate-800 border border-slate-600 rounded-md flex-shrink-0 flex items-center justify-center"><i data-lucide="image" class="w-6 h-6 text-slate-500"></i></div>`;
 
@@ -562,7 +677,7 @@ function loadHistory() {
             <div class="bg-slate-700/50 rounded-xl p-3 border border-slate-600 flex gap-4 items-center transition hover:bg-slate-700">
                 ${thumbHtml}
                 <div class="flex-1">
-                    <p class="font-bold text-white flex items-center gap-2">${label} <span class="text-xs bg-slate-900/50 text-slate-300 px-2 py-0.5 rounded-full border border-slate-600">${record.difficulty} pz</span></p>
+                    <p class="font-bold text-white flex items-center gap-2">${label} <span class="text-xs bg-slate-900/50 text-slate-300 px-2 py-0.5 rounded-full border border-slate-600">${record.difficulty} ${translations[currentLang].pieces}</span></p>
                     <p class="text-xs text-slate-400 mt-1"><i data-lucide="calendar" class="w-3 h-3 inline"></i> ${record.date}</p>
                 </div>
                 <div class="font-mono ${color} font-black text-lg pr-2 md:text-xl">
@@ -594,3 +709,11 @@ btnCloseHistory.addEventListener('click', () => {
     historyModalContent.classList.add('scale-95');
     setTimeout(() => historyModal.classList.add('hidden'), 500);
 });
+
+// Inicializar idioma
+document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        setLanguage(e.target.dataset.lang);
+    });
+});
+setLanguage(currentLang);

@@ -42,54 +42,41 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-dark text-white min-h-screen overflow-hidden font-sans flex flex-col select-none touch-none">
+    <!-- Language Selector -->
+    <div class="fixed top-4 right-4 z-[100] flex gap-2 bg-slate-800/80 backdrop-blur border border-slate-700 p-1.5 rounded-full shadow-lg">
+        <button class="lang-btn px-2.5 py-1 text-xs font-bold rounded-full transition-colors bg-blue-600 text-white" data-lang="es">ES</button>
+        <button class="lang-btn px-2.5 py-1 text-xs font-bold rounded-full transition-colors text-slate-400 hover:text-white" data-lang="en">EN</button>
+        <button class="lang-btn px-2.5 py-1 text-xs font-bold rounded-full transition-colors text-slate-400 hover:text-white" data-lang="fr">FR</button>
+    </div>
     
     <!-- Screen 1: Upload (Start) -->
     <section id="screen-upload" class="absolute inset-0 z-10 flex flex-col items-center justify-center p-6 bg-gradient-to-br from-slate-900 to-indigo-950 transition-opacity duration-500">
         <h1 class="text-4xl md:text-5xl font-extrabold mb-2 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">FotoPuzzle</h1>
-        <p class="text-slate-400 mb-10 text-center max-w-md">Transforma tus fotografías en puzles y desafía tu mente.</p>
+        <p class="text-slate-400 mb-10 text-center max-w-md" data-i18n="desc_main">Transforma tus fotografías en puzles y desafía tu mente.</p>
         
         <div class="flex flex-col gap-4 w-full max-w-xs">
             <label class="relative group cursor-pointer overflow-hidden rounded-2xl bg-blue-600 hover:bg-blue-500 hover:scale-105 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(59,130,246,0.6)] duration-300 transition-all p-4 shadow-lg shadow-blue-900/50 flex flex-col items-center justify-center border border-blue-400/30">
                 <i data-lucide="image-plus" class="w-8 h-8 mb-2 group-hover:scale-110 transition-transform"></i>
-                <span class="font-semibold">Subir Fotografía</span>
+                <span class="font-semibold" data-i18n="btn_upload">Subir Fotografía</span>
                 <input type="file" id="uploadFile" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full" />
             </label>
             
             <label class="relative group cursor-pointer overflow-hidden rounded-2xl bg-slate-800 hover:bg-slate-700 hover:scale-105 hover:-translate-y-1 hover:shadow-xl hover:border-purple-500/50 duration-300 transition-all p-4 shadow-lg flex flex-col items-center justify-center border border-slate-600">
                 <i data-lucide="camera" class="w-8 h-8 mb-2 text-purple-400 group-hover:scale-110 transition-transform"></i>
-                <span class="font-semibold flex items-center gap-2">Hacer Foto</span>
+                <span class="font-semibold flex items-center gap-2"><span data-i18n="btn_capture">Hacer Foto</span></span>
                 <input type="file" id="captureFile" accept="image/*" capture="environment" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full" />
             </label>
         </div>
-        <button id="btn-show-history" class="mt-8 px-4 py-2 rounded-xl text-slate-400 hover:text-blue-400 hover:bg-slate-800/80 hover:scale-105 transition-all duration-300 flex items-center gap-2"><i data-lucide="award" class="w-5 h-5"></i> Ver Historial de Puzles</button>
+        <button id="btn-show-history" class="mt-8 px-4 py-2 rounded-xl text-slate-400 hover:text-blue-400 hover:bg-slate-800/80 hover:scale-105 transition-all duration-300 flex items-center gap-2"><i data-lucide="award" class="w-5 h-5"></i> <span data-i18n="btn_history">Ver Historial de Puzles</span></button>
 
-        <!-- SECCIÓN DEMO -->
-        <div class="mt-8 text-center w-full max-w-md">
-            <p class="text-slate-500 text-xs mb-3 uppercase tracking-widest font-semibold flex items-center justify-center gap-2">
-                <span class="w-6 h-[1px] bg-slate-700"></span> Galería Demo <span class="w-6 h-[1px] bg-slate-700"></span>
-            </p>
-            <div class="flex overflow-x-auto gap-4 pb-4 snap-x snap-mandatory px-0 md:px-0 scrollbar-thin scrollbar-thumb-slate-700 justify-start md:justify-center">
-                <button class="btn-demo snap-center group shrink-0 relative rounded-2xl overflow-hidden border border-slate-700 hover:border-blue-500 hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all duration-300 w-[130px] h-[90px] flex items-center justify-center bg-slate-800" data-src="demo_family.png">
-                    <img src="demo_family.png" class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-all duration-500" alt="Demo familiar" />
-                    <span class="absolute inset-x-0 bottom-0 py-1 bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-bold shadow-lg border-t border-slate-700 opacity-90 group-hover:opacity-100 transition-opacity">Picnic Familiar</span>
-                </button>
-                <button class="btn-demo snap-center group shrink-0 relative rounded-2xl overflow-hidden border border-slate-700 hover:border-blue-500 hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all duration-300 w-[130px] h-[90px] flex items-center justify-center bg-slate-800" data-src="demo_family2.png">
-                    <img src="demo_family2.png" class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-all duration-500" alt="Demo familiar 2" />
-                    <span class="absolute inset-x-0 bottom-0 py-1 bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-bold shadow-lg border-t border-slate-700 opacity-90 group-hover:opacity-100 transition-opacity">Parque Infantil</span>
-                </button>
-                <button class="btn-demo snap-center group shrink-0 relative rounded-2xl overflow-hidden border border-slate-700 hover:border-blue-500 hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all duration-300 w-[130px] h-[90px] flex items-center justify-center bg-slate-800" data-src="demo_dino.png">
-                    <img src="demo_dino.png" class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-all duration-500" alt="Demo dinos" />
-                    <span class="absolute inset-x-0 bottom-0 py-1 bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-bold shadow-lg border-t border-slate-700 opacity-90 group-hover:opacity-100 transition-opacity">Dinosaurios</span>
-                </button>
-            </div>
-        </div>
+
     </section>
 
     <!-- Screen 2: Config -->
     <section id="screen-config" class="hidden absolute inset-0 z-20 flex flex-col items-center justify-center p-4 md:p-6 bg-gradient-to-br from-slate-900 to-indigo-950 transition-opacity duration-500 opacity-0">
         <button id="btn-back-config" class="absolute top-6 left-6 p-2 rounded-full bg-slate-800/50 hover:bg-slate-700 transition"><i data-lucide="arrow-left"></i></button>
         
-        <h2 class="text-2xl font-bold mb-6">Configura tu Puzle</h2>
+        <h2 class="text-2xl font-bold mb-6" data-i18n="config_title">Configura tu Puzle</h2>
         
         <!-- Preview Container -->
         <div class="w-full max-w-xs md:max-w-md aspect-[3/4] md:aspect-[4/3] bg-black/40 rounded-xl overflow-hidden shadow-2xl border border-slate-700 mb-8 relative flex items-center justify-center bg-cover bg-center" id="img-preview">
@@ -97,24 +84,24 @@
         </div>
         
         <div class="w-full max-w-md">
-            <p class="text-sm text-slate-400 mb-3 text-center uppercase tracking-wider font-semibold">Selecciona la Dificultad</p>
+            <p class="text-sm text-slate-400 mb-3 text-center uppercase tracking-wider font-semibold" data-i18n="config_diff">Selecciona la Dificultad</p>
             <div class="grid grid-cols-3 gap-3 mb-8">
                 <button class="difficulty-btn px-4 py-3 rounded-xl bg-slate-800 border-2 border-slate-700 hover:border-blue-400 focus:border-blue-500 transition-all text-center flex flex-col items-center gap-1 active-diff" data-pieces="12">
-                    <span class="font-bold text-lg text-green-400">Fácil</span>
-                    <span class="text-xs text-slate-400">12 piezas</span>
+                    <span class="font-bold text-lg text-green-400" data-i18n="diff_easy">Fácil</span>
+                    <span class="text-xs text-slate-400" data-i18n="pieces_12">12 piezas</span>
                 </button>
                 <button class="difficulty-btn px-4 py-3 rounded-xl bg-slate-800 border-2 border-slate-700 hover:border-blue-400 focus:border-blue-500 transition-all text-center flex flex-col items-center gap-1" data-pieces="24">
-                    <span class="font-bold text-lg text-yellow-400">Medio</span>
-                    <span class="text-xs text-slate-400">24 piezas</span>
+                    <span class="font-bold text-lg text-yellow-400" data-i18n="diff_medium">Medio</span>
+                    <span class="text-xs text-slate-400" data-i18n="pieces_24">24 piezas</span>
                 </button>
                 <button class="difficulty-btn px-4 py-3 rounded-xl bg-slate-800 border-2 border-slate-700 hover:border-blue-400 focus:border-blue-500 transition-all text-center flex flex-col items-center gap-1" data-pieces="48">
-                    <span class="font-bold text-lg text-red-400">Difícil</span>
-                    <span class="text-xs text-slate-400">48 piezas</span>
+                    <span class="font-bold text-lg text-red-400" data-i18n="diff_hard">Difícil</span>
+                    <span class="text-xs text-slate-400" data-i18n="pieces_48">48 piezas</span>
                 </button>
             </div>
             
             <button id="btn-generate" class="w-full py-4 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 font-bold text-lg shadow-lg hover:shadow-blue-500/50 hover:scale-[1.02] transition-transform flex items-center justify-center gap-2">
-                <i data-lucide="play"></i> Generar Puzle
+                <i data-lucide="play"></i> <span data-i18n="btn_generate">Generar Puzle</span>
             </button>
         </div>
     </section>
@@ -135,7 +122,7 @@
                 <span id="game-timer" class="font-bold text-green-400">00:00</span>
             </div>
             <button id="btn-toggle-preview" class="px-3 sm:px-4 py-2 rounded-full bg-slate-800/80 backdrop-blur hover:bg-slate-700 border border-slate-700 text-white shadow font-semibold flex items-center gap-2 transition-colors">
-                <i data-lucide="eye" id="icon-eye" class="w-4 h-4"></i> <span class="hidden sm:inline">Ver Foto</span>
+                <i data-lucide="eye" id="icon-eye" class="w-4 h-4"></i> <span class="hidden sm:inline" data-i18n="btn_view_photo">Ver Foto</span>
             </button>
         </div>
 
@@ -151,8 +138,8 @@
         <!-- Tray Area -->
         <div id="tray-container" class="w-full h-[40%] md:w-[350px] md:h-full bg-slate-800/90 border-t md:border-t-0 md:border-l border-slate-700 shadow-2xl relative flex flex-col">
             <div class="p-3 border-b border-slate-700 flex justify-between items-center bg-slate-800/50">
-                <h3 class="font-bold text-slate-300 flex items-center gap-2"><i data-lucide="package-open" class="w-4 h-4"></i> Bandeja</h3>
-                <button id="btn-shuffle" class="p-1.5 rounded bg-slate-700 hover:bg-slate-600 text-xs font-semibold flex items-center gap-1 transition-colors"><i data-lucide="shuffle" class="w-3 h-3"></i> Mezclar</button>
+                <h3 class="font-bold text-slate-300 flex items-center gap-2"><i data-lucide="package-open" class="w-4 h-4"></i> <span data-i18n="tray_title">Bandeja</span></h3>
+                <button id="btn-shuffle" class="p-1.5 rounded bg-slate-700 hover:bg-slate-600 text-xs font-semibold flex items-center gap-1 transition-colors"><i data-lucide="shuffle" class="w-3 h-3"></i> <span data-i18n="btn_shuffle">Mezclar</span></button>
             </div>
             <!-- Pieces will go here -->
             <div id="tray" class="flex-1 overflow-y-auto overflow-x-hidden p-4 relative content-start flex flex-wrap gap-2 md:gap-4 md:justify-center will-change-transform touch-pan-y">
@@ -166,19 +153,19 @@
             <div class="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <i data-lucide="award" class="w-10 h-10 text-green-400 animate-bounce-slight"></i>
             </div>
-            <h2 class="text-3xl font-extrabold mb-1 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">¡Completado!</h2>
-            <p class="text-slate-400 mb-2">Has resuelto el puzle correctamente.</p>
-            <p class="text-white font-mono text-lg mb-8 bg-slate-900 border border-slate-700 rounded-lg py-2 inline-block px-4">Tiempo: <span id="win-time-text" class="text-green-400">00:00</span></p>
+            <h2 class="text-3xl font-extrabold mb-1 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600" data-i18n="win_title">¡Completado!</h2>
+            <p class="text-slate-400 mb-2" data-i18n="win_desc">Has resuelto el puzle correctamente.</p>
+            <p class="text-white font-mono text-lg mb-8 bg-slate-900 border border-slate-700 rounded-lg py-2 inline-block px-4"><span data-i18n="win_time">Tiempo:</span> <span id="win-time-text" class="text-green-400">00:00</span></p>
             
             <div class="flex flex-col gap-3">
                 <button id="btn-win-replay" class="py-3 px-4 rounded-xl bg-slate-700 hover:bg-slate-600 font-semibold transition flex items-center justify-center gap-2">
-                    <i data-lucide="rotate-ccw" class="w-5 h-5"></i> Volver a jugar (Mismo)
+                    <i data-lucide="rotate-ccw" class="w-5 h-5"></i> <span data-i18n="btn_replay">Volver a jugar (Mismo)</span>
                 </button>
                 <button id="btn-win-diff" class="py-3 px-4 rounded-xl bg-slate-700 hover:bg-slate-600 font-semibold transition flex items-center justify-center gap-2">
-                    <i data-lucide="settings-2" class="w-5 h-5"></i> Cambiar dificultad
+                    <i data-lucide="settings-2" class="w-5 h-5"></i> <span data-i18n="btn_change_diff">Cambiar dificultad</span>
                 </button>
                 <button id="btn-win-new" class="py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold transition flex items-center justify-center gap-2">
-                    <i data-lucide="camera" class="w-5 h-5"></i> Nueva foto
+                    <i data-lucide="camera" class="w-5 h-5"></i> <span data-i18n="btn_new_photo">Nueva foto</span>
                 </button>
             </div>
         </div>
@@ -188,7 +175,7 @@
     <div id="history-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm opacity-0 transition-opacity duration-500">
         <div class="bg-slate-800 rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl border border-slate-700 max-h-[80vh] flex flex-col transform scale-95 transition-transform duration-500" id="history-modal-content">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold flex items-center gap-2 text-white"><i data-lucide="history" class="text-blue-400"></i> Historial</h2>
+                <h2 class="text-2xl font-bold flex items-center gap-2 text-white"><i data-lucide="history" class="text-blue-400"></i> <span data-i18n="history_title">Historial</span></h2>
                 <button id="btn-close-history" class="p-2 rounded-full hover:bg-slate-700 text-slate-400 hover:text-white transition"><i data-lucide="x"></i></button>
             </div>
             <div id="history-list" class="flex-1 overflow-y-auto pr-2 space-y-3">

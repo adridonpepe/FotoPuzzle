@@ -42,15 +42,16 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-dark text-white min-h-screen overflow-hidden font-sans flex flex-col select-none touch-none">
-    <!-- Language Selector -->
-    <div class="fixed top-4 right-4 z-[100] flex gap-2 bg-slate-800/80 backdrop-blur border border-slate-700 p-1.5 rounded-full shadow-lg">
-        <button class="lang-btn px-2.5 py-1 text-xs font-bold rounded-full transition-colors bg-blue-600 text-white" data-lang="es">ES</button>
-        <button class="lang-btn px-2.5 py-1 text-xs font-bold rounded-full transition-colors text-slate-400 hover:text-white" data-lang="en">EN</button>
-        <button class="lang-btn px-2.5 py-1 text-xs font-bold rounded-full transition-colors text-slate-400 hover:text-white" data-lang="fr">FR</button>
-    </div>
     
     <!-- Screen 1: Upload (Start) -->
     <section id="screen-upload" class="absolute inset-0 z-10 flex flex-col items-center justify-center p-6 bg-gradient-to-br from-slate-900 to-indigo-950 transition-opacity duration-500">
+        <!-- Language Selector -->
+        <div class="absolute top-4 right-4 z-[100] flex gap-2 bg-slate-800/80 backdrop-blur border border-slate-700 p-1.5 rounded-full shadow-lg">
+            <button class="lang-btn px-2.5 py-1 text-xs font-bold rounded-full transition-colors bg-blue-600 text-white" data-lang="es">ES</button>
+            <button class="lang-btn px-2.5 py-1 text-xs font-bold rounded-full transition-colors text-slate-400 hover:text-white" data-lang="en">EN</button>
+            <button class="lang-btn px-2.5 py-1 text-xs font-bold rounded-full transition-colors text-slate-400 hover:text-white" data-lang="fr">FR</button>
+        </div>
+        
         <h1 class="text-4xl md:text-5xl font-extrabold mb-2 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">FotoPuzzle</h1>
         <p class="text-slate-400 mb-10 text-center max-w-md" data-i18n="desc_main">Transforma tus fotografías en puzles y desafía tu mente.</p>
         

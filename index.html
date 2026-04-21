@@ -49,19 +49,19 @@
         <p class="text-slate-400 mb-10 text-center max-w-md">Transforma tus fotografías en puzles y desafía tu mente.</p>
         
         <div class="flex flex-col gap-4 w-full max-w-xs">
-            <label class="relative group cursor-pointer overflow-hidden rounded-2xl bg-blue-600 hover:bg-blue-500 transition-all p-4 shadow-lg shadow-blue-900/50 flex flex-col items-center justify-center border border-blue-400/30">
-                <i data-lucide="image-plus" class="w-8 h-8 mb-2"></i>
+            <label class="relative group cursor-pointer overflow-hidden rounded-2xl bg-blue-600 hover:bg-blue-500 hover:scale-105 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(59,130,246,0.6)] duration-300 transition-all p-4 shadow-lg shadow-blue-900/50 flex flex-col items-center justify-center border border-blue-400/30">
+                <i data-lucide="image-plus" class="w-8 h-8 mb-2 group-hover:scale-110 transition-transform"></i>
                 <span class="font-semibold">Subir Fotografía</span>
                 <input type="file" id="uploadFile" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full" />
             </label>
             
-            <label class="relative group cursor-pointer overflow-hidden rounded-2xl bg-slate-800 hover:bg-slate-700 transition-all p-4 shadow-lg flex flex-col items-center justify-center border border-slate-600">
-                <i data-lucide="camera" class="w-8 h-8 mb-2 text-purple-400"></i>
-                <span class="font-semibold">Hacer Foto</span>
+            <label class="relative group cursor-pointer overflow-hidden rounded-2xl bg-slate-800 hover:bg-slate-700 hover:scale-105 hover:-translate-y-1 hover:shadow-xl hover:border-purple-500/50 duration-300 transition-all p-4 shadow-lg flex flex-col items-center justify-center border border-slate-600">
+                <i data-lucide="camera" class="w-8 h-8 mb-2 text-purple-400 group-hover:scale-110 transition-transform"></i>
+                <span class="font-semibold flex items-center gap-2">Hacer Foto</span>
                 <input type="file" id="captureFile" accept="image/*" capture="environment" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full" />
             </label>
         </div>
-        <button id="btn-show-history" class="mt-8 text-slate-400 hover:text-white transition flex items-center gap-2"><i data-lucide="award" class="w-5 h-5"></i> Ver Historial de Puzles</button>
+        <button id="btn-show-history" class="mt-8 px-4 py-2 rounded-xl text-slate-400 hover:text-blue-400 hover:bg-slate-800/80 hover:scale-105 transition-all duration-300 flex items-center gap-2"><i data-lucide="award" class="w-5 h-5"></i> Ver Historial de Puzles</button>
     </section>
 
     <!-- Screen 2: Config -->
